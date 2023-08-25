@@ -1,0 +1,89 @@
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url(../fonts/proxima_nova.otf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: 'Proxima Nova';
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    overflow: hidden;
+}
+
+
+#app {
+    display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(36deg, #000 0%, rgba(0, 0, 0, 0.48) 100%), rgba(211, 211, 211, 0) 50% / cover no-repeat;
+}
+
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.opacity-enter-active {
+    animation: opacity 0.3s ease forwards !important;
+}
+
+.opacity-leave-active {
+    animation: opacity 0.3s ease forwards reverse !important;
+}
+
+#license:last-child {
+    margin-right: 0 !important;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.custom-radio {
+    display: inline-block;
+    width: 3.7037vh; 
+    height: 3.7037vh; 
+    background-color: #5A5A5A0D; 
+    border-radius: 50%; 
+    position: relative;
+    cursor: pointer;
+}
+  
+
+.custom-radio input:checked + .inner-circle {
+    background-color: #63CD3E; 
+}
+  
+.inner-circle {
+    width: 3.7037vh; 
+    height: 3.7037vh; 
+    border-radius: 50%; 
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.2s ease-in-out;
+}
+
+
+::-webkit-scrollbar {
+    background-color: rgb(45, 45, 45);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(69, 69, 68);
+    border-radius: 5px;
+}

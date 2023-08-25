@@ -1,0 +1,128 @@
+<html>
+    <head>
+        <title></title>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <link rel="stylesheet" href="./css/style.css">
+    </head>
+    <body>
+
+        <div id="app">
+            <div class="h-full w-full flex justify-center items-center">
+                <div class="h-[93.3%] w-[92%] border-[2px] border-[#464646] absolute border rounded-[10px]">
+                    <div class="h-full w-full bg-no-repeat bg-cover bg-[url('./img/bg.png')]">
+
+                        <div class="w-full h-[23%] flex justify-center">
+                            <div class="absolute top-[0.5%] text-[70px]">{{config.Lang.dmv}}</div>
+                            <div class="absolute top-[10.5%] w-[23.7%] h-[1%] bg-[white]" class="descriptiondmv"></div>
+                            <div class="absolute w-[35%] h-[10%] top-[12.5%] flex justify-center text-center">{{this.descriptionTitle}}</div>
+                        </div>
+
+                        <transition name="opacity">
+                            <div v-if="schermata=='risultato'" class="absolute h-full w-full flex justify-center items-center text-center">
+                                <span v-if="this.facendoTeoria" class="absolute text-[80px] top-[13%]">{{config.Lang.point}}<br>{{correctAnswers}}/{{currentQuestions.length}}</span>
+                                <span v-if="this.facendoPratica" class="absolute text-[80px] top-[13%]">{{config.Lang.error}}<br>{{correctAnswers}}</span>
+
+                                <div @click="close()" class="absolute top-[55.4%] rounded-[10px] left-[41.1%] h-[8.2%] w-[18%] border-[#77C149] border-[1px] bg-[#2DFF0B0D] cursor-pointer duration-[1s] hover:bg-[#2DFF0B69]">
+                                    <div class="h-full w-full justify-center flex items-center">
+                                        <span class="text-[30px]">{{config.Lang.ok}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
+
+                        <transition name="opacity">
+                            <div v-if="schermata=='theory'">
+                                <div class="h-full w-full flex justify-center">
+                                    <div @click="updateQuestion()" class="absolute top-[78.4%] rounded-[10px] left-[41.1%] h-[8.2%] w-[18%] border-[#77C149] border-[1px] bg-[#2DFF0B0D] cursor-pointer duration-[1s] hover:bg-[#2DFF0B69]">
+                                        <div class="h-full w-full justify-center flex items-center">
+                                            <span class="text-[30px]">{{config.Lang.ok}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-[90%] h-[50%]">
+                                        <div v-for="(v,k) in currentQuestion.options" class="relative h-[8%] w-full top-[6.5%] left-[7.5%] mb-[2.9%]">
+                                            <label class="custom-radio">
+                                                <input :correct="v.correct" type="radio" name="radio-group">
+                                                <div @click="updateSelectedQuestion(k)" class="inner-circle"></div>
+                                              </label>
+                                              <span class="absolute top-[5%] left-[7%] text-[25px]">{{v.label}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
+
+                        <transition name="opacity">
+                            <!-- Container Licenze -->
+                            <div v-if="schermata=='license'" class="absolute left-[12.4%] top-[25%] w-[75.8%] h-[70%] flex overflow-x-auto scroll-smooth">
+                                <div v-for="v in license" id="license" class="relative h-[99%] min-w-[28.5%] mr-[7.2%] border-[1px] rounded-[10px] border-[#464646] bg-[#d8d8d80d]">
+                                    <div class="w-full h-[47%]">
+                                        <img style="transform: rotate(2.242deg) scale(1.5); left: 3vh; box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.56); position: absolute; height: auto; width: auto;" :src="'./img/'+v.img" alt="">
+                                    </div>
+                                    <div class="w-full h-full top-[49%] flex absolute justify-center text-[30px]">
+                                        <div>{{v.label}}</div>
+                                    </div>
+                                    <div v-if="checkLicense(v.id) == 'theory'">
+                                        <div class="absolute w-full h-[21.9%] flex justify-center items-center top-[63%]">
+                                            <div @click="startTheory(v.id, domande)" class="absolute top-[0] w-[79%] h-[35%] border-[1px] border-[#77C149] rounded-[10px] bg-[#2DFF0B0D] cursor-pointer duration-[1s] hover:bg-[#2DFF0B69]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.start_theory}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="absolute top-[64%] w-[79%] h-[35%] border-[1px] border-[#D42E2E] rounded-[10px] bg-[#9A1F1F0D] cursor-pointer duration-[1s] hover:bg-[#9A1F1F69]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.theory_before}}</div>
+                                                    <div class="h-[16px] w-[16px] absolute right-[6%] bg-cover bg-no-repeat bg-[url('./img/lock.png')]"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div v-if="checkLicense(v.id) == 'none'">
+                                        <div class="absolute w-full h-[21.9%] flex justify-center items-center top-[63%]">
+                                            <div class="absolute top-[0] w-[79%] h-[35%] border-[1px] border-[#77C149] rounded-[10px] bg-[#2DFF0B0D] cursor-pointer duration-[1s] hover:bg-[#2DFF0B69]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.test_passed}}</div>
+                                                    <div class="h-[16px] w-[16px] absolute right-[6%] bg-cover bg-no-repeat bg-[url('./img/lock.png')]"></div>
+                                                </div>
+                                            </div>
+                                            <div class="absolute top-[64%] w-[79%] h-[35%] border-[1px] border-[#77C149] rounded-[10px] bg-[#2DFF0B0D] cursor-pointer duration-[1s] hover:bg-[#2DFF0B69]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.test_passed}}</div>
+                                                    <div class="h-[16px] w-[16px] absolute right-[6%] bg-cover bg-no-repeat bg-[url('./img/lock.png')]"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div v-if="checkLicense(v.id) == 'practice'">
+                                        <div class="absolute w-full h-[21.9%] flex justify-center items-center top-[63%]">
+                                            <div class="absolute top-[0%] w-[79%] h-[35%] border-[1px] border-[#D42E2E] rounded-[10px] bg-[#9A1F1F0D] cursor-pointer duration-[1s] hover:bg-[#9A1F1F69]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.already_done}}</div>
+                                                    <div class="h-[16px] w-[16px] absolute right-[6%] bg-cover bg-no-repeat bg-[url('./img/lock.png')]"></div>
+                                                </div>
+                                            </div>
+                                            <div @click="startPractice(v.id)" class="absolute top-[64%] w-[79%] h-[35%] border-[1px] border-[#77C149] duration-[1s] rounded-[10px] bg-[#2DFF0B0D] cursor-pointer hover:bg-[#77C14969]">
+                                                <div class="h-full w-full flex items-center justify-center">
+                                                    <div>{{config.Lang.start_practice}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <script src='https://code.jquery.com/jquery-3.1.1.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js'></script>
+        <script src="./js/script.js"></script>
+        <script src='https://cdn.tailwindcss.com'></script>
+    </body>
+</html>
