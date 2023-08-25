@@ -85,9 +85,9 @@ const app = new Vue({
                         license : this.licenseSelected
                     })
                     this.licenseSelected = false
-                    this.descriptionTitle = "Congratulazioni, hai passato il test teorico, torna tra poco per effettuare il test pratico!"
+                    this.descriptionTitle = this.config.Lang.theory_success
                 } else {
-                    this.descriptionTitle = "Ci spiace comunicarti che non hai passato il test teorico, non abbatterti, torna tra poco più preparato e ritenta il test!"
+                    this.descriptionTitle = this.config.Lang.theory_error
                 }
                 for(const[k,v] of Object.entries(this.currentQuestions)) {
                     v.attr = false
@@ -223,9 +223,9 @@ window.addEventListener('message', function(event) {
         app.facendoPratica = true
         app.facendoTeoria = false
         if(data.errori >= app.config.MaxErrors) {
-            app.descriptionTitle = "Ci spiace comunicarti che non hai passato il test pratico, non abbatterti, torna tra poco più preparato e ritenta il test!"
+            app.descriptionTitle = app.config.Lang["practice_error"]
         } else {
-            app.descriptionTitle = "Congratulazioni, hai passato il test pratico!"
+            app.descriptionTitle = app.config.Lang["practice_success"]
             app.postMessage('practiceOk', {
                 license : app.licenseSelected
             })
