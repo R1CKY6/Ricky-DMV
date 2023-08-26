@@ -35,7 +35,7 @@ end)
 RegisterNUICallback('removeMoney', function(data)
     local account = data.account
     local amount = tonumber(data.amount)
-    TriggerServerEvent('ricky-dmv:removeMoney', account, money)
+    TriggerServerEvent('ricky-dmv:removeMoney', account, amount)
 end)
 
 RegisterNetEvent('ricky-dmv:updateLicense')
