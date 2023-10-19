@@ -157,12 +157,12 @@ const app = new Vue({
                     if(this.contanti >= v.pricing.practice) {
                         this.postMessage('removeMoney', {
                             account : "money",
-                            amount : v.price
+                            amount : v.pricing.practice
                         })
                     } else if(this.banca >= v.pricing.practice) {
                         this.postMessage('removeMoney', {
                             account : "bank",
-                            amount : v.price
+                            amount : v.pricing.practice
                         })
                     } else {
                         var missingMoney = v.pricing.practice - this.contanti
