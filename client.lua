@@ -125,23 +125,52 @@ RegisterNUICallback('startPractice', function(data)
 end)
 
 
-local sleep2 = 1000
-Citizen.CreateThread(function()
-  while true do
-    Citizen.Wait(sleep2)
-     for k,v in pairs(Config.DMVSchool) do 
-        DrawMarker(Config.MarkerSettings.type, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, Config.MarkerSettings.size, Config.MarkerSettings.color, 100, Config.MarkerSettings.bump, true, 2, Config.MarkerSettings.rotate, false, false, false)
+if Config.Interact == 'esx' then
+    local sleep2 = 1000
+    Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(sleep2)
+        for k,v in pairs(Config.DMVSchool) do 
+            DrawMarker(Config.MarkerSettings.type, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, Config.MarkerSettings.size, Config.MarkerSettings.color, 100, Config.MarkerSettings.bump, true, 2, Config.MarkerSettings.rotate, false, false, false)
 
-        local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, GetEntityCoords(PlayerPedId()), true)
-        if distance < 5.5 then
-            sleep2 = 0
-            ESX.ShowHelpNotification(Config.Lang[Config.Language]["open_dmv"])
-            if IsControlJustReleased(0, 38) then
-                OpenDMV()
+            local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, GetEntityCoords(PlayerPedId()), true)
+            if distance < 5.5 then
+                sleep2 = 0
+                ESX.ShowHelpNotification(Config.Lang[Config.Language]["open_dmv"])
+                if IsControlJustReleased(0, 38) then
+                    OpenDMV()
+                end
+            else
+                sleep2 = 1000
             end
-        else
-            sleep2 = 1000
         end
     end
-   end
-end)
+    end)
+elseif Config.Interact == 'ox' then
+    Citizen.CreateThread(function()
+        for k, v in pairs(Config.DMVSchool) do
+        exports.ox_target:addBoxZone({
+            coords = vector3(v.x, v.y, v.z),
+            size = vector3(2, 2, 2),
+            options = {
+            {
+                name = 'dmv_school',
+                event = 'dmv:openDMV',
+                icon = 'fas fa-car',
+                label = Config.Lang[Config.Language]['target_open_dmv'],
+                canInteract = function()
+                local playerCoords = GetEntityCoords(PlayerPedId())
+                local distance = #(playerCoords - vector3(v.x, v.y, v.z))
+                return distance < 5.5
+                end
+            }
+            }
+        })
+        end
+    end)
+
+    RegisterNetEvent('dmv:openDMV')
+    AddEventHandler('dmv:openDMV', function()
+        OpenDMV()
+    end)
+end
