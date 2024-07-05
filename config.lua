@@ -6,6 +6,8 @@ Config.DMVSchool = {
 
 Config.Language = "it"
 
+Config.Interact = 'ox'
+
 Config.SpeedMultiplier = 3.6 -- 3.6 for kmh, 2.236936 for mph
 
 Config.MaxErrors = 3 -- Max errors before fail
@@ -478,6 +480,7 @@ Config.Lang = {
     ['it'] = {
         ['speed_error'] = "Vai troppo veloce, rallenta!",
         ['open_dmv'] = "Premi ~INPUT_CONTEXT~ per aprire la scuola guida",
+        ['target_open_dmv'] = "Open the DMV",
         ['dmv'] = "SCUOLA GUIDA",
         ['point'] = "PUNTEGGIO",
         ['error'] = "ERRORI",
@@ -496,6 +499,7 @@ Config.Lang = {
     ['en'] = {
         ['speed_error'] = "You are going too fast, slow down!",
         ['open_dmv'] = "Press ~INPUT_CONTEXT~ to open the DMV",
+        ['target_open_dmv'] = "Open the DMV",
         ['dmv'] = "DMV SCHOOL",
         ['point'] = "POINT",
         ['error'] = "ERROR",
